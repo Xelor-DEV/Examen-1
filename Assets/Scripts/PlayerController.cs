@@ -1,19 +1,40 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody _compRigidbody;
     [SerializeField] private float velocidad;
     [SerializeField] private float fuerza_de_salto;
-    [SerializeField] private float vida;
+    [SerializeField] private int vida;
+    public Action<int> CuandoSeActualiceVida;
+    public GameManagerController gameManager;
+    
+    public int Vida
+    {
+        get
+        {
+            return vida;
+        }
+        set
+        {
+            vida = value;
+            CuandoSeActualiceVida?.Invoke(vida);
+        }
+    } 
     private bool se_puede_saltar;
     private Vector3 direccion_de_movimiento;
+
     [Header("Raycast Properties")]
     [SerializeField] private LayerMask capas_interactuables;
     [SerializeField] private float distanciaDelRayo;
     [SerializeField] private Color colorDelRayoDebug;
 
-    
+    private void OnEnable()
+    {
+        CuandoSeActualiceVida += AumentarVida;
+        CuandoSeActualiceVida += gameManager.ActualizarVidaTexto;
+    }
     void Awake()
     {
         _compRigidbody = GetComponent<Rigidbody>();
@@ -49,5 +70,17 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Final")
+        {
+            gameManager.CuandoElJugadorEsDerrotado?.Invoke();
+        }
+    }
+    public void AumentarVida(int aumento)
+    {
+        Vida = Vida + aumento;
+    }
+    
 
 }
