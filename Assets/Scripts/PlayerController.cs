@@ -6,12 +6,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float velocidad;
     [SerializeField] private float fuerza_de_salto;
     [SerializeField] private float vida;
-    [SerializeField] private bool se_puede_saltar;
-    [SerializeField] private Vector3 direccion_de_movimiento;
+    private bool se_puede_saltar;
+    private Vector3 direccion_de_movimiento;
     [Header("Raycast Properties")]
     [SerializeField] private LayerMask capas_interactuables;
     [SerializeField] private float distanciaDelRayo;
     [SerializeField] private Color colorDelRayoDebug;
+
     
     void Awake()
     {
@@ -19,7 +20,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Movimiento(InputAction.CallbackContext context)
     {
-        direccion_de_movimiento = new Vector3(context.ReadValue<Vector2>().x ,0, context.ReadValue<Vector2>().y);
+        direccion_de_movimiento = new Vector3(context.ReadValue<Vector2>().x, 0, context.ReadValue<Vector2>().y);
     }
     void Update()
     {
@@ -48,4 +49,5 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+
 }
